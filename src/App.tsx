@@ -1,8 +1,16 @@
+import { CartDrawer } from './components/Cart/CartDrawer'
+import { Catalog } from './components/Catalog/Catalog'
+import { Header } from './components/Header/Header'
+
 function App() {
   return (
-    <main>
-      <h1>ShopCart</h1>
-    </main>
+    <>
+      <Header />
+      <main className="app-layout">
+        <Catalog />
+        <CartDrawer />
+      </main>
+    </>
   )
 }
 
