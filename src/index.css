@@ -306,6 +306,24 @@ button:disabled {
   font-size: 1.35rem;
 }
 
+.checkout-message {
+  margin: 0 0 16px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  font-size: 0.85rem;
+  line-height: 1.4;
+}
+
+.checkout-message--error {
+  color: var(--danger);
+  background: #fff0f1;
+}
+
+.checkout-message--success {
+  color: #17653a;
+  background: #e9f8ef;
+}
+
 @media (max-width: 900px) {
   .app-layout {
     grid-template-columns: 1fr;
