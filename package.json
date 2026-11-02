@@ -10,8 +10,10 @@
     "server": "json-server --watch db.json --port 3001 --delay 1500"
   },
   "dependencies": {
+    "@xstate/react": "^6.1.0",
     "react": "^19.3.1",
     "react-dom": "^19.3.1",
+    "xstate": "^5.33.3",
     "zustand": "^5.0.16"
   },
   "devDependencies": {
