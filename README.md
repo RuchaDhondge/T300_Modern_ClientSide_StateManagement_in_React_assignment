@@ -1,8 +1,8 @@
 # ShopCart
 
 ShopCart is a React and TypeScript shopping-cart application demonstrating
-client-side state management patterns. This branch implements the cart with
-Zustand.
+client-side state management patterns. This branch combines Zustand cart state
+with an XState v5 checkout workflow.
 
 ## Requirements
 
@@ -17,7 +17,7 @@ Install dependencies:
 npm install
 ```
 
-Start the mock REST API:
+Start the delayed mock REST API:
 
 ```bash
 npm run server
@@ -41,13 +41,26 @@ npm run build
 npm run preview
 ```
 
-## Zustand implementation
+## XState checkout workflow
 
-The cart uses one typed Zustand store with selector-based subscriptions.
-Derived item-count and total values are calculated by selectors rather than
-stored separately. Components that only trigger actions subscribe only to
-those actions, while grouped selections use shallow comparison.
+The checkout machine models review, payment submission, and terminal success
+states. A guard prevents empty-cart submission, and UI controls query the
+machine with `snapshot.can({ type: 'SUBMIT' })` rather than duplicating the
+business rule.
 
-Checkout is implemented as an asynchronous store action that reads the current
-cart, posts the order to `/api/orders`, and transitions through idle,
-submitting, success, and error states.
+Payment is invoked as a promise actor that posts to `/api/orders`. Leaving the
+submitting state through `CANCEL` aborts the request with the actor's native
+`AbortSignal`. Failed requests return to review while retaining an error
+message.
+
+One shared checkout actor serves the cart and payment panels. A headless
+synchronizer sends Zustand cart updates to the machine, while a completion
+bridge listens for the machine's success event and clears the Zustand cart.
+
+## Verify cancellation
+
+1. Add a product to the cart.
+2. Open browser DevTools and select the Network tab.
+3. Select **Submit payment**.
+4. Select **Cancel** before the configured 1.5-second API delay completes.
+5. Confirm the request is marked as canceled and the UI returns to review.
